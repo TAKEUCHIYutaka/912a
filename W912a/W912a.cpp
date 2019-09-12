@@ -12,7 +12,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキ�
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
 const int Nu = 3120; const int Nr = 4208;
-int numu, numr,i;
+int numu, numr,i,num;
 double t1[3][Nu][Nr];
 unsigned int tem[3][Nu][Nr * 2];
 unsigned int c1[Nu][Nr];
@@ -134,59 +134,60 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_CREATE:
 		DragAcceptFiles(hWnd,TRUE);
+		
 		break;
 
 	case WM_DROPFILES:
 		HDROP hdrop;
 		WCHAR filename[MAX_PATH];
-		int num, i;
+		
+		
 
 		hdrop = (HDROP)wParam;
 		/* ドロップされたファイルの個数を得る */
-		num = DragQueryFile(hdrop, -1, NULL, 0);
+		//num = DragQueryFile(hdrop, -1, NULL, 0);
 		/* ファイルを処理 */
-		for (i = 0; i < num; i++) {
-			DragQueryFile(hdrop, i,filename,sizeof(filename));
+		for (i = 0; i < 2; i++) {
+			DragQueryFile(hdrop, i, filename, sizeof(filename));
 			/*
 			 * filename にファイル名が入っているので、ここで処理を行う。
 			 */
-
-
-			fstream file;
-			char buf[1];
-			unsigned char bufa[1];
-
-			file.open(filename, ios::in | ios::binary);
+		
 			
-			while (!file.eof()) {
-				file.read(buf, sizeof(buf));
-				int k = 0;
-				bufa[k] = buf[k];
+				fstream file;
+				char buf[1];
+				unsigned char bufa[1];
 
-				for (int k = 0, size = file.gcount(); k < size; ++k) {
+				file.open(filename, ios::in | ios::binary);
 
-					tem[i][numu][numr] = bufa[k];
-					++numr;
-					if (numr == (Nr+Nr)) {
-						numr = 0;
-						++numu;
+				while (!file.eof()) {
+					file.read(buf, sizeof(buf));
+					int k = 0;
+					bufa[k] = buf[k];
+
+					for (int k = 0, size = file.gcount(); k < size; ++k) {
+
+						tem[i][numu][numr] = bufa[k];
+						++numr;
+						if (numr == (Nr + Nr)) {
+							numr = 0;
+							++numu;
+						}
 					}
 				}
-			}
-			file.close();
+				file.close();
+			
 
 			for (numu = 0; numu < Nu; ++numu) {
 				for (numr = 0; numr < Nr; ++numr) {
-					t1[i][numu][numr] = (tem[i][numu][numr * 2] + tem[i][numu][(numr * 2) + 1] * 256)/4;
-				
+					t1[i][numu][numr] = (tem[i][numu][numr * 2] + tem[i][numu][(numr * 2) + 1] * 256) / 4;
+
 				}
 			}
 
-		
-
-
 
 		}
+		
 		DragFinish(hdrop);
 
 
@@ -199,14 +200,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wmId)
             {
 			case ID_32771://連続
-				
 				for (numu = 0; numu < Nu; ++numu) {
 					for (numr = 0; numr < Nr; ++numr) {
-						c1[numu][numr] = t1[0][numu][numr] + t1[1][numu][numr];
+						c1[numu][numr] =( t1[0][numu][numr] + t1[1][numu][numr])/2;
 					}
 				}
-				
-				
 				break;
 			case ID_32772://色
 				break;
@@ -214,26 +212,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				break;
 			case ID_32774://保存
 			{
-				fstream file;
-				ofstream ofs("0912A4.ppm");
+				
+					fstream file;
+					ofstream ofs("0912AA22.ppm");
 
-				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
-
-				if (ofs) {
-					for (numu = 0; numu < Nu; ++numu)
-					{
-						for (numr = 0; numr <Nr; numr++)
-						{
-							ofs << c1[numu][numr] << ' '; ofs << c1[numu][numr] << ' '; ofs << c1[numu][numr] << ' ';
-							if (numr == 4207)
+					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+					
+						if (ofs) {
+							for (numu = 0; numu <3120; ++numu)
 							{
-								ofs << "\n";
-							}
+								for (numr = 0; numr < Nr; numr++)
+								{
+									ofs << c1[numu][numr] << ' '; ofs << c1[numu][numr] << ' '; ofs << c1[numu][numr] << ' ';
+									if (numr == 4207)
+									{
+										ofs << "\n";
+									}
 
-						}
+								}
+							}
+						
 					}
-				}
-				file.close();
+					file.close();
+				
 			}
 				break;
             case IDM_ABOUT:
