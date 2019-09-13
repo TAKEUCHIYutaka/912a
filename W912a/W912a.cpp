@@ -12,10 +12,10 @@ WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキ�
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
 const int Nu = 3120; const int Nr = 4208;
-int numu, numr,i,num;
+int numu = 0; int numr = 0; int i=0 ; int num=0;
 double t1[3][Nu][Nr];
 unsigned int tem[3][Nu][Nr * 2];
-unsigned int c1[Nu][Nr];
+unsigned int c1[2][Nu][Nr];
 
 
 // このコード モジュールに含まれる関数の宣言を転送します:
@@ -147,13 +147,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		/* ドロップされたファイルの個数を得る */
 		//num = DragQueryFile(hdrop, -1, NULL, 0);
 		/* ファイルを処理 */
-		for (i = 0; i < 2; i++) {
-			DragQueryFile(hdrop, i, filename, sizeof(filename));
+		//for (i = 0; i < 2; i++) {
+			DragQueryFile(hdrop, num, filename, sizeof(filename));
 			/*
 			 * filename にファイル名が入っているので、ここで処理を行う。
 			 */
-		
-			
+
+			{
 				fstream file;
 				char buf[1];
 				unsigned char bufa[1];
@@ -176,7 +176,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 				}
 				file.close();
-			
+			}
 
 			for (numu = 0; numu < Nu; ++numu) {
 				for (numr = 0; numr < Nr; ++numr) {
@@ -186,9 +186,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 
-		}
-		
+		//}
+
 		DragFinish(hdrop);
+		numu = 0; numr = 0;
+		i++;
 
 
 		break;
@@ -202,19 +204,51 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_32771://連続
 				for (numu = 0; numu < Nu; ++numu) {
 					for (numr = 0; numr < Nr; ++numr) {
-						c1[numu][numr] =( t1[0][numu][numr] + t1[1][numu][numr])/2;
+						c1[0][numu][numr] =( t1[0][numu][numr] + t1[1][numu][numr])/2;
 					}
 				}
 				break;
 			case ID_32772://色
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr]+ t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr]+ t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+			
 				break;
 			case ID_32773://スケール
+			{
+
+				fstream file;
+				ofstream ofs("0912C4.ppm");
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < 3120; ++numu)
+					{
+						for (numr = 0; numr < Nr; numr++)
+						{
+							ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' ';
+							if (numr == 4207)
+							{
+								ofs << "\n";
+							}
+
+						}
+					}
+
+				}
+				file.close();
+
+			}
 				break;
 			case ID_32774://保存
 			{
 				
 					fstream file;
-					ofstream ofs("0912AA22.ppm");
+					ofstream ofs("0912C1.ppm");
 
 					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
 					
@@ -223,7 +257,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 							{
 								for (numr = 0; numr < Nr; numr++)
 								{
-									ofs << c1[numu][numr] << ' '; ofs << c1[numu][numr] << ' '; ofs << c1[numu][numr] << ' ';
+									ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
 									if (numr == 4207)
 									{
 										ofs << "\n";
