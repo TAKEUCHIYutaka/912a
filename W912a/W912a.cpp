@@ -201,54 +201,63 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // 選択されたメニューの解析:
             switch (wmId)
             {
-			case ID_32771://連続
+			case ID_32775://グレーノンスケール
 				for (numu = 0; numu < Nu; ++numu) {
 					for (numr = 0; numr < Nr; ++numr) {
 						c1[0][numu][numr] =( t1[0][numu][numr] + t1[1][numu][numr])/2;
 					}
 				}
 				break;
-			case ID_32772://色
+			case ID_32787://グレースケール
+				break;
+			case ID_32788://カラーのンスケール
 				for (numu = 0; numu < Nu; ++numu) {
 					for (numr = 0; numr < Nr; ++numr) {
 						c1[0][numu][numr] = (t1[0][numu][numr]+ t1[0][numu][numr]) / 3;
 						c1[1][numu][numr] = (t1[0][numu][numr]+ t1[0][numu][numr] + t1[1][numu][numr]) / 3;
 					}
 				}
+				break;
+			case ID_32789://カラースケール
+				break;
+			case ID_32780://単独1nonスケール
+				break;
+			case ID_32781://単独2ﾉﾝｽｹｰﾙ
+				break;
+			case ID_32785://単独1スケール
+				break;
+			case ID_32786://単独2スケール
+				break;
+
 			
-				break;
-			case ID_32773://スケール
+			case ID_32790://グレーのンスケール保存
 			{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
 
-				fstream file;
-				ofstream ofs("0912C4.ppm");
-
-				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
-
-				if (ofs) {
-					for (numu = 0; numu < 3120; ++numu)
-					{
-						for (numr = 0; numr < Nr; numr++)
-						{
-							ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' ';
-							if (numr == 4207)
-							{
-								ofs << "\n";
-							}
-
-						}
-					}
-
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
 				}
-				file.close();
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+				}
 
-			}
-				break;
-			case ID_32774://保存
-			{
-				
+
+
 					fstream file;
-					ofstream ofs("0912C1.ppm");
+					ofstream ofs(szFile);
 
 					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
 					
@@ -271,6 +280,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				
 			}
 				break;
+
+			case ID_32792://カラーのンスケール保存
+			{
+
+				fstream file;
+				ofstream ofs("0912YY1.ppm");
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < 3120; ++numu)
+					{
+						for (numr = 0; numr < Nr; numr++)
+						{
+							ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+							if (numr == 4207)
+							{
+								ofs << "\n";
+							}
+
+						}
+					}
+
+				}
+				file.close();
+
+			}
+			break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
