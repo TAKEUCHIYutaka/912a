@@ -9,8 +9,9 @@
 // グローバル変数:
 HINSTANCE hInst;                                // 現在のインターフェイス
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
-WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
+WCHAR szWindowClass[MAX_LOADSTRING]; // メイン ウィンドウ クラス名
 
+LPCWSTR texting;
 const int Nu = 3120; const int Nr = 4208;
 int numu = 0; int numr = 0; int i=0 ; int num=0;
 double t1[3][Nu][Nr];
@@ -105,7 +106,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      512, 256, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -132,28 +133,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-	case WM_CREATE:
-		DragAcceptFiles(hWnd,TRUE);
-		
+	case WM_CREATE: 
+		DragAcceptFiles(hWnd, TRUE);
+		texting = TEXT("あと2ファイル取得できます。");
 		break;
-
+	
 	case WM_DROPFILES:
+		
 		HDROP hdrop;
 		WCHAR filename[MAX_PATH];
 		
-		
 
 		hdrop = (HDROP)wParam;
+
+		texting = TEXT("読み込んでいます");
+		UpdateWindow(hWnd);
+
 		/* ドロップされたファイルの個数を得る */
 		//num = DragQueryFile(hdrop, -1, NULL, 0);
 		/* ファイルを処理 */
 		//for (i = 0; i < 2; i++) {
 			DragQueryFile(hdrop, num, filename, sizeof(filename));
 			/*
-			 * filename にファイル名が入っているので、ここで処理を行う。
-			 */
+			  filename にファイル名が入っているので、ここで処理を行う。*/
+			
+			
 
 			{
+				
+
 				fstream file;
 				char buf[1];
 				unsigned char bufa[1];
@@ -186,51 +194,208 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 
-		//}
+		
 
 		DragFinish(hdrop);
 		numu = 0; numr = 0;
 		i++;
-
-
+		if (i == 1) {
+			texting = TEXT("あと1ファイル取得できます。");
+		}
+		else if (i == 2) {
+			texting = TEXT("ファイル取得が完了しました。");
+		}
+		InvalidateRect(hWnd, NULL, TRUE);
 		break;
 
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
             // 選択されたメニューの解析:
-            switch (wmId)
-            {
+			switch (wmId)
+			{
 			case ID_32775://グレーノンスケール
 				for (numu = 0; numu < Nu; ++numu) {
 					for (numr = 0; numr < Nr; ++numr) {
-						c1[0][numu][numr] =( t1[0][numu][numr] + t1[1][numu][numr])/2;
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
 					}
 				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
 				break;
 			case ID_32787://グレースケール
-				break;
-			case ID_32788://カラーのンスケール
 				for (numu = 0; numu < Nu; ++numu) {
 					for (numr = 0; numr < Nr; ++numr) {
-						c1[0][numu][numr] = (t1[0][numu][numr]+ t1[0][numu][numr]) / 3;
-						c1[1][numu][numr] = (t1[0][numu][numr]+ t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
 					}
 				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
 				break;
-			case ID_32789://カラースケール
+			case ID_32788://yellowのンスケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_32789://yellowスケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_BLUE_32808://blueNONスケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_BLUE_32810://blueスケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_RED_32812://redNONスケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_RED_32814://redNONスケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr]) / 3;
+						c1[1][numu][numr] = (t1[0][numu][numr] + t1[0][numu][numr] + t1[1][numu][numr]) / 3;
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
 				break;
 			case ID_32780://単独1nonスケール
-				break;
-			case ID_32781://単独2ﾉﾝｽｹｰﾙ
-				break;
-			case ID_32785://単独1スケール
-				break;
-			case ID_32786://単独2スケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = t1[0][numu][numr];
+
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
 				break;
 
-			
+			case ID_32781://単独2ﾉﾝｽｹｰﾙ
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[1][numu][numr] = t1[1][numu][numr];
+
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_32785://単独1スケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = t1[0][numu][numr];
+
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+			case ID_32786://単独2スケール
+				for (numu = 0; numu < Nu; ++numu) {
+					for (numr = 0; numr < Nr; ++numr) {
+						c1[0][numu][numr] = t1[0][numu][numr];
+
+					}
+				}
+				texting = TEXT("画像データが作成されました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				break;
+
 			case ID_32790://グレーのンスケール保存
+
+				texting = TEXT("保存を開始しています。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+
+				}
+
+				
+				{
+				fstream file;
+				ofstream ofs(szFile);
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < 3120; ++numu)
+					{
+
+						for (numr = 0; numr < Nr; ++numr)
+						{
+							ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+							if (numr == 4207)
+							{
+								ofs << "\n";
+
+
+
+							}
+						}
+					}
+
+				}
+				file.close();
+			}
+					texting = TEXT("保存が完了しました。");
+					InvalidateRect(hWnd, NULL, TRUE);
+			
+				break;
+
+
+			case ID_32798://グレースケール保存
 			{
 				static OPENFILENAME     ofn;
 				static TCHAR        szPath[MAX_PATH];
@@ -256,50 +421,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-					fstream file;
-					ofstream ofs(szFile);
-
-					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
-					
-						if (ofs) {
-							for (numu = 0; numu <3120; ++numu)
-							{
-								for (numr = 0; numr < Nr; numr++)
-								{
-									ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
-									if (numr == 4207)
-									{
-										ofs << "\n";
-									}
-
-								}
-							}
-						
-					}
-					file.close();
-				
-			}
-				break;
-
-			case ID_32792://カラーのンスケール保存
-			{
-
 				fstream file;
-				ofstream ofs("0912YY1.ppm");
+				ofstream ofs(szFile);
 
 				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
 
 				if (ofs) {
-					for (numu = 0; numu < 3120; ++numu)
+					for (numu = 0; numu < Nu; ++numu)
 					{
-						for (numr = 0; numr < Nr; numr++)
+						for (numr = 0; numr < Nr; ++numr)
 						{
-							ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
-							if (numr == 4207)
-							{
-								ofs << "\n";
+							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+								ofs <<0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
+							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
+							}
+							else {
+								ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
 
+								}
+							}
 						}
 					}
 
@@ -307,7 +452,633 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				file.close();
 
 			}
+			texting = TEXT("保存が完了しました。");
+			InvalidateRect(hWnd, NULL, TRUE);
 			break;
+
+			case ID_32792://yellowのンスケール保存
+			{
+				texting = TEXT("保存を開始しています。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+
+				}
+
+
+				
+					fstream file;
+					ofstream ofs(szFile);
+
+					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+					if (ofs) {
+						for (numu = 0; numu < 3120; ++numu)
+						{
+
+							for (numr = 0; numr < Nr; ++numr)
+							{
+								ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+
+
+								}
+							}
+						}
+
+					}
+					file.close();
+				}
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+			
+
+			}
+			break;
+
+			case ID_32793://yellowスケール
+			{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+				}
+
+
+				
+				fstream file;
+				ofstream ofs(szFile);
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < Nu; ++numu)
+					{
+						for (numr = 0; numr < Nr; ++numr)
+						{
+							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
+							}
+							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
+							}
+							else {
+								ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+								}
+							}
+						}
+					}
+
+				}
+				file.close();
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+			}
+				break;
+				
+				/**/
+
+			case ID_BLUE_32809://blueのンスケール保存
+			{
+				texting = TEXT("保存を開始しています。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				{
+					static OPENFILENAME     ofn;
+					static TCHAR        szPath[MAX_PATH];
+					static TCHAR            szFile[MAX_PATH];
+
+					if (szPath[0] == TEXT('\0')) {
+						GetCurrentDirectory(MAX_PATH, szPath);
+					}
+					if (ofn.lStructSize == 0) {
+						ofn.lStructSize = sizeof(OPENFILENAME);
+						ofn.hwndOwner = hWnd;
+						ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+						ofn.lpstrFile = szFile;       // 選択ファイル格納
+						ofn.nMaxFile = MAX_PATH;
+						ofn.lpstrDefExt = TEXT(".ppm");
+						ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+						ofn.lpstrTitle = TEXT("画像を保存します。");
+						ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+					}
+					if (GetSaveFileName(&ofn)) {
+						MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+
+					}
+
+
+
+					fstream file;
+					ofstream ofs(szFile);
+
+					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+					if (ofs) {
+						for (numu = 0; numu < 3120; ++numu)
+						{
+
+							for (numr = 0; numr < Nr; ++numr)
+							{
+								ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+
+
+								}
+							}
+						}
+
+					}
+					file.close();
+				}
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+
+
+			}
+			break;
+
+			case ID_BLUE_32811://blueスケール
+			{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+				}
+
+
+
+				fstream file;
+				ofstream ofs(szFile);
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < Nu; ++numu)
+					{
+						for (numr = 0; numr < Nr; ++numr)
+						{
+							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
+							}
+							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
+							}
+							else {
+								ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+								}
+							}
+						}
+					}
+
+				}
+				file.close();
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+			}
+			break;
+
+			case ID_RED_32813://redのンスケール保存
+			{
+				texting = TEXT("保存を開始しています。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				{
+					static OPENFILENAME     ofn;
+					static TCHAR        szPath[MAX_PATH];
+					static TCHAR            szFile[MAX_PATH];
+
+					if (szPath[0] == TEXT('\0')) {
+						GetCurrentDirectory(MAX_PATH, szPath);
+					}
+					if (ofn.lStructSize == 0) {
+						ofn.lStructSize = sizeof(OPENFILENAME);
+						ofn.hwndOwner = hWnd;
+						ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+						ofn.lpstrFile = szFile;       // 選択ファイル格納
+						ofn.nMaxFile = MAX_PATH;
+						ofn.lpstrDefExt = TEXT(".ppm");
+						ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+						ofn.lpstrTitle = TEXT("画像を保存します。");
+						ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+					}
+					if (GetSaveFileName(&ofn)) {
+						MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+
+					}
+
+
+
+					fstream file;
+					ofstream ofs(szFile);
+
+					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+					if (ofs) {
+						for (numu = 0; numu < 3120; ++numu)
+						{
+
+							for (numr = 0; numr < Nr; ++numr)
+							{
+								ofs << c1[1][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+
+
+								}
+							}
+						}
+
+					}
+					file.close();
+				}
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+
+
+			}
+			break;
+
+			case ID_RED_32815://redスケール
+			{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+				}
+
+
+
+				fstream file;
+				ofstream ofs(szFile);
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < Nu; ++numu)
+					{
+						for (numr = 0; numr < Nr; ++numr)
+						{
+							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
+							}
+							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
+							}
+							else {
+								ofs << c1[1][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+								}
+							}
+						}
+					}
+
+				}
+				file.close();
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+			}
+			break;
+
+			case ID_32794://単1のンスケール保存
+			{
+				texting = TEXT("保存を開始しています。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				{
+					static OPENFILENAME     ofn;
+					static TCHAR        szPath[MAX_PATH];
+					static TCHAR            szFile[MAX_PATH];
+
+					if (szPath[0] == TEXT('\0')) {
+						GetCurrentDirectory(MAX_PATH, szPath);
+					}
+					if (ofn.lStructSize == 0) {
+						ofn.lStructSize = sizeof(OPENFILENAME);
+						ofn.hwndOwner = hWnd;
+						ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+						ofn.lpstrFile = szFile;       // 選択ファイル格納
+						ofn.nMaxFile = MAX_PATH;
+						ofn.lpstrDefExt = TEXT(".ppm");
+						ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+						ofn.lpstrTitle = TEXT("画像を保存します。");
+						ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+					}
+					if (GetSaveFileName(&ofn)) {
+						MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+
+					}
+
+
+
+					fstream file;
+					ofstream ofs(szFile);
+
+					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+					if (ofs) {
+						for (numu = 0; numu < 3120; ++numu)
+						{
+
+							for (numr = 0; numr < Nr; ++numr)
+							{
+								ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+
+
+								}
+							}
+						}
+
+					}
+					file.close();
+				}
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+
+
+			}
+			break;
+
+			case ID_32796://単1スケール
+			{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+				}
+
+
+
+				fstream file;
+				ofstream ofs(szFile);
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < Nu; ++numu)
+					{
+						for (numr = 0; numr < Nr; ++numr)
+						{
+							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
+							}
+							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
+							}
+							else {
+								ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' '; ofs << c1[0][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+								}
+							}
+						}
+					}
+
+				}
+				file.close();
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+			}
+			break;
+			
+			/**/
+			case ID_32795://単2のンスケール保存
+			{
+				texting = TEXT("保存を開始しています。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				{
+					static OPENFILENAME     ofn;
+					static TCHAR        szPath[MAX_PATH];
+					static TCHAR            szFile[MAX_PATH];
+
+					if (szPath[0] == TEXT('\0')) {
+						GetCurrentDirectory(MAX_PATH, szPath);
+					}
+					if (ofn.lStructSize == 0) {
+						ofn.lStructSize = sizeof(OPENFILENAME);
+						ofn.hwndOwner = hWnd;
+						ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+						ofn.lpstrFile = szFile;       // 選択ファイル格納
+						ofn.nMaxFile = MAX_PATH;
+						ofn.lpstrDefExt = TEXT(".ppm");
+						ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+						ofn.lpstrTitle = TEXT("画像を保存します。");
+						ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+					}
+					if (GetSaveFileName(&ofn)) {
+						MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+
+					}
+
+
+
+					fstream file;
+					ofstream ofs(szFile);
+
+					ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+					if (ofs) {
+						for (numu = 0; numu < 3120; ++numu)
+						{
+
+							for (numr = 0; numr < Nr; ++numr)
+							{
+								ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+
+
+								}
+							}
+						}
+
+					}
+					file.close();
+				}
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+
+
+			}
+			break;
+
+			case ID_32797://単2スケール
+			{
+				static OPENFILENAME     ofn;
+				static TCHAR        szPath[MAX_PATH];
+				static TCHAR            szFile[MAX_PATH];
+
+				if (szPath[0] == TEXT('\0')) {
+					GetCurrentDirectory(MAX_PATH, szPath);
+				}
+				if (ofn.lStructSize == 0) {
+					ofn.lStructSize = sizeof(OPENFILENAME);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrInitialDir = szPath;       // 初期フォルダ位置
+					ofn.lpstrFile = szFile;       // 選択ファイル格納
+					ofn.nMaxFile = MAX_PATH;
+					ofn.lpstrDefExt = TEXT(".ppm");
+					ofn.lpstrFilter = TEXT("ppmファイル(*.ppm)\0*.ppm\0");
+					ofn.lpstrTitle = TEXT("画像を保存します。");
+					ofn.Flags = OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+				}
+				if (GetSaveFileName(&ofn)) {
+					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
+				}
+
+
+
+				fstream file;
+				ofstream ofs(szFile);
+
+				ofs << "P3\n#4208x3120\n4208 3120\n255\n";
+
+				if (ofs) {
+					for (numu = 0; numu < Nu; ++numu)
+					{
+						for (numr = 0; numr < Nr; ++numr)
+						{
+							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
+							}
+							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
+							}
+							else {
+								ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' '; ofs << c1[1][numu][numr] << ' ';
+								if (numr == 4207)
+								{
+									ofs << "\n";
+
+								}
+							}
+						}
+					}
+
+				}
+				file.close();
+				texting = TEXT("保存が完了しました。");
+				InvalidateRect(hWnd, NULL, TRUE);
+
+			}
+			break;
+
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
@@ -324,6 +1095,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: HDC を使用する描画コードをここに追加してください...
+	
+			TextOut(hdc, 10, 10,texting,wcslen(texting));
             EndPaint(hWnd, &ps);
         }
         break;
