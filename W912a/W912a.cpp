@@ -10,6 +10,11 @@
 HINSTANCE hInst;                                // 現在のインターフェイス
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING]; // メイン ウィンドウ クラス名
+HWND hWnd, hDlg1, hDlg2, hDlg3,hDlg4;
+
+
+#define MAX_WIDTH       (4120)
+#define MAX_HEIGHT      (3120)
 
 LPCWSTR texting;
 const int Nu = 3120; const int Nr = 4208;
@@ -23,6 +28,11 @@ unsigned int c1[2][Nu][Nr];
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK    Pict1Proc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK    Pict2Proc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK    Pict3Proc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK    Pict4Proc(HWND, UINT, WPARAM, LPARAM);
+
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -336,9 +346,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case ID_32790://グレーのンスケール保存
 
-				texting = TEXT("保存を開始しています。");
-				InvalidateRect(hWnd, NULL, TRUE);
-
 				static OPENFILENAME     ofn;
 				static TCHAR        szPath[MAX_PATH];
 				static TCHAR            szFile[MAX_PATH];
@@ -362,6 +369,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				}
 
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 				
 				{
 				fstream file;
@@ -419,7 +429,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 
 				fstream file;
 				ofstream ofs(szFile);
@@ -431,10 +443,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						for (numr = 0; numr < Nr; ++numr)
 						{
-							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+							if (numu > 3100 && numu < 3106 && numr>3930 && numr < 4056) {
 								ofs <<0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
-							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+							else if (numu > 3105 && numu < 3111 && numr>3930 && numr < 4056) {
 								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
 							}
 							else {
@@ -458,8 +470,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case ID_32792://yellowのンスケール保存
 			{
-				texting = TEXT("保存を開始しています。");
-				InvalidateRect(hWnd, NULL, TRUE);
+			
 				{
 				static OPENFILENAME     ofn;
 				static TCHAR        szPath[MAX_PATH];
@@ -484,7 +495,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 				
 					fstream file;
 					ofstream ofs(szFile);
@@ -543,7 +556,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 				
 				fstream file;
 				ofstream ofs(szFile);
@@ -555,10 +570,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						for (numr = 0; numr < Nr; ++numr)
 						{
-							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+							if (numu > 3100 && numu < 3106 && numr>3930 && numr < 4056) {
 								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
-							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+							else if (numu > 3105 && numu < 3111 && numr>3930 && numr < 4056) {
 								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
 							}
 							else {
@@ -584,8 +599,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case ID_BLUE_32809://blueのンスケール保存
 			{
-				texting = TEXT("保存を開始しています。");
-				InvalidateRect(hWnd, NULL, TRUE);
+			
 				{
 					static OPENFILENAME     ofn;
 					static TCHAR        szPath[MAX_PATH];
@@ -610,7 +624,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					}
 
-
+					texting = TEXT("保存中です。。");
+					InvalidateRect(hWnd, NULL, TRUE);
+					UpdateWindow(hWnd);
 
 					fstream file;
 					ofstream ofs(szFile);
@@ -669,7 +685,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 
 				fstream file;
 				ofstream ofs(szFile);
@@ -681,10 +699,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						for (numr = 0; numr < Nr; ++numr)
 						{
-							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+							if (numu > 3100 && numu < 3106 && numr>3930 && numr < 4056) {
 								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
-							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+							else if (numu > 3105 && numu < 3111 && numr>3930 && numr < 4056) {
 								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
 							}
 							else {
@@ -708,8 +726,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case ID_RED_32813://redのンスケール保存
 			{
-				texting = TEXT("保存を開始しています。");
-				InvalidateRect(hWnd, NULL, TRUE);
+			
 				{
 					static OPENFILENAME     ofn;
 					static TCHAR        szPath[MAX_PATH];
@@ -734,7 +751,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					}
 
-
+					texting = TEXT("保存中です。。");
+					InvalidateRect(hWnd, NULL, TRUE);
+					UpdateWindow(hWnd);
 
 					fstream file;
 					ofstream ofs(szFile);
@@ -793,7 +812,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 
 				fstream file;
 				ofstream ofs(szFile);
@@ -805,10 +826,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						for (numr = 0; numr < Nr; ++numr)
 						{
-							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+							if (numu > 3100 && numu < 3106 && numr>3930 && numr < 4056) {
 								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
-							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+							else if (numu > 3105 && numu < 3111 && numr>3930 && numr < 4056) {
 								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
 							}
 							else {
@@ -832,8 +853,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case ID_32794://単1のンスケール保存
 			{
-				texting = TEXT("保存を開始しています。");
-				InvalidateRect(hWnd, NULL, TRUE);
+			
 				{
 					static OPENFILENAME     ofn;
 					static TCHAR        szPath[MAX_PATH];
@@ -858,7 +878,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					}
 
-
+					texting = TEXT("保存中です。。");
+					InvalidateRect(hWnd, NULL, TRUE);
+					UpdateWindow(hWnd);
 
 					fstream file;
 					ofstream ofs(szFile);
@@ -917,7 +939,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 
 				fstream file;
 				ofstream ofs(szFile);
@@ -929,10 +953,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						for (numr = 0; numr < Nr; ++numr)
 						{
-							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+							if (numu > 3100 && numu < 3106 && numr>3930 && numr < 4056) {
 								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
-							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+							else if (numu > 3105 && numu < 3111 && numr>3930 && numr < 4056) {
 								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
 							}
 							else {
@@ -957,8 +981,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			/**/
 			case ID_32795://単2のンスケール保存
 			{
-				texting = TEXT("保存を開始しています。");
-				InvalidateRect(hWnd, NULL, TRUE);
+				
+
 				{
 					static OPENFILENAME     ofn;
 					static TCHAR        szPath[MAX_PATH];
@@ -983,7 +1007,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					}
 
-
+					texting = TEXT("保存中です。。");
+					InvalidateRect(hWnd, NULL, TRUE);
+					UpdateWindow(hWnd);
 
 					fstream file;
 					ofstream ofs(szFile);
@@ -1042,7 +1068,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					MessageBox(hWnd, szFile, TEXT("ファイル名を付けて保存"), MB_OK);
 				}
 
-
+				texting = TEXT("保存中です。。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
 
 				fstream file;
 				ofstream ofs(szFile);
@@ -1054,10 +1082,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						for (numr = 0; numr < Nr; ++numr)
 						{
-							if (numu > 10 && numu < 16 && numr>30 && numr < 155) {
+							if (numu > 3100 && numu < 3106 && numr>3930 && numr < 4056) {
 								ofs << 0 << ' '; ofs << 0 << ' '; ofs << 0 << ' ';
 							}
-							else if (numu > 15 && numu < 21 && numr>30 && numr < 155) {
+							else if (numu > 3105 && numu < 3111 && numr>3930 && numr < 4056) {
 								ofs << 255 << ' '; ofs << 255 << ' '; ofs << 255 << ' ';
 							}
 							else {
@@ -1079,6 +1107,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 
+			case ID_YELLOW_32816:
+				texting = TEXT("表示の準備中です。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
+				hDlg1 = CreateDialog(hInst, MAKEINTRESOURCE(IDD_FORMVIEW), hWnd, (DLGPROC)Pict1Proc);
+				ShowWindow(hDlg1, SW_SHOW);
+				break;
+			case ID_BLUE_32817:
+				texting = TEXT("表示の準備中です。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
+				hDlg2 = CreateDialog(hInst, MAKEINTRESOURCE(IDD_FORMVIEW), hWnd, (DLGPROC)Pict2Proc);
+				ShowWindow(hDlg2, SW_SHOW);
+				break;
+			case ID_RED_32818:
+				texting = TEXT("表示の準備中です。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
+				hDlg3 = CreateDialog(hInst, MAKEINTRESOURCE(IDD_FORMVIEW), hWnd, (DLGPROC)Pict3Proc);
+				ShowWindow(hDlg3, SW_SHOW);
+				break;
+			case ID_32819:
+				texting = TEXT("表示の準備中です。");
+				InvalidateRect(hWnd, NULL, TRUE);
+				UpdateWindow(hWnd);
+				hDlg3 = CreateDialog(hInst, MAKEINTRESOURCE(IDD_FORMVIEW), hWnd, (DLGPROC)Pict4Proc);
+				ShowWindow(hDlg4, SW_SHOW);
+				break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
@@ -1108,6 +1164,426 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return 0;
 }
+
+
+
+LRESULT CALLBACK Pict1Proc(HWND hDlg1, UINT message, WPARAM wParam, LPARAM lParam)//Y
+{
+	static HBITMAP  hBitmap;    // ビットマップ
+	static HDC      hMemDC;     // オフスクリーン
+	static UINT     saveX;
+	static UINT     saveY;
+	static SCROLLINFO scrInfoH, scrInfoV;
+
+	switch (message)
+	{
+
+	case WM_CLOSE:
+		DeleteDC(hMemDC);
+		DeleteObject(hBitmap);
+		DestroyWindow(hDlg1);
+		break;
+
+	case WM_INITDIALOG:
+		HDC hDC;
+
+		// DCコンパチブルの作成
+		hDC = GetDC(hDlg1);
+		hMemDC = CreateCompatibleDC(hDC);
+		hBitmap = CreateCompatibleBitmap(hDC, MAX_WIDTH, MAX_HEIGHT);
+		SelectObject(hMemDC, hBitmap);
+		ReleaseDC(hDlg1, hDC);
+
+		for (numu = 0; numu < Nu; ++numu) {
+			for (numr = 0; numr < Nr; ++numr) {
+				SetPixel(hMemDC, numr, numu, RGB(c1[1][numu][numr], c1[1][numu][numr], c1[0][numu][numr]));
+			}
+		}
+		  
+
+		//横スクロールバー初期設定
+		scrInfoH.cbSize = sizeof(SCROLLINFO);
+		scrInfoH.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoH.nMin = 0;
+		scrInfoH.nMax = Nr;
+		scrInfoH.nPage = 1;
+		scrInfoH.nPos = 0;
+		
+
+		//縦スクロールバー初期設定
+		scrInfoV.cbSize = sizeof(SCROLLINFO);
+		scrInfoV.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoV.nMin = 0;
+		scrInfoV.nMax = Nu;
+		scrInfoV.nPage = 1;
+		scrInfoV.nPos = 0;
+		
+		texting = TEXT("表示しました。");
+		InvalidateRect(hWnd, NULL, TRUE);
+		
+
+		break;
+	case WM_PAINT:
+		PAINTSTRUCT     ps;
+
+
+		// DCコンパチブルの描画
+		hDC = BeginPaint(hDlg1, &ps);
+		BitBlt(hDC, 0, 0, MAX_WIDTH, MAX_HEIGHT, hMemDC, scrInfoH.nPos, scrInfoV.nPos, SRCCOPY);
+		EndPaint(hDlg1, &ps);
+
+		break;
+	case WM_SIZE:
+		scrInfoV.nPos = 0;
+		scrInfoH.nPos = 0;
+		InvalidateRect(hDlg1, NULL, TRUE);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_RIGHT:
+			scrInfoH.nPos += 10;
+			InvalidateRect(hDlg1, NULL, TRUE);
+
+			break;
+		case VK_LEFT:
+			scrInfoH.nPos -= 10;
+			InvalidateRect(hDlg1, NULL, TRUE);
+
+			break;
+		case VK_UP:
+			scrInfoV.nPos -= 10;
+			InvalidateRect(hDlg1, NULL, TRUE);
+
+			break;
+		case VK_DOWN:
+			scrInfoV.nPos += 10;
+			InvalidateRect(hDlg1, NULL, TRUE);
+
+			break;
+		default:
+			break;
+		}
+
+	default:
+		return DefWindowProc(hDlg1, message, wParam, lParam);
+	}
+	return 0;
+}
+
+
+LRESULT CALLBACK Pict2Proc(HWND hDlg2, UINT message, WPARAM wParam, LPARAM lParam)//B
+{
+	static HBITMAP  hBitmap;    // ビットマップ
+	static HDC      hMemDC;     // オフスクリーン
+	static UINT     saveX;
+	static UINT     saveY;
+	static SCROLLINFO scrInfoH, scrInfoV;
+
+	switch (message)
+	{
+
+	case WM_CLOSE:
+		DeleteDC(hMemDC);
+		DeleteObject(hBitmap);
+		DestroyWindow(hDlg2);
+		break;
+
+	case WM_INITDIALOG:
+		HDC hDC;
+
+		// DCコンパチブルの作成
+		hDC = GetDC(hDlg2);
+		hMemDC = CreateCompatibleDC(hDC);
+		hBitmap = CreateCompatibleBitmap(hDC, MAX_WIDTH, MAX_HEIGHT);
+		SelectObject(hMemDC, hBitmap);
+		ReleaseDC(hDlg2, hDC);
+
+		for (numu = 0; numu < Nu; ++numu) {
+			for (numr = 0; numr < Nr; ++numr) {
+				SetPixel(hMemDC, numr, numu, RGB(c1[0][numu][numr], c1[0][numu][numr], c1[1][numu][numr]));
+			}
+		}
+
+
+		//横スクロールバー初期設定
+		scrInfoH.cbSize = sizeof(SCROLLINFO);
+		scrInfoH.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoH.nMin = 0;
+		scrInfoH.nMax = Nr;
+		scrInfoH.nPage = 1;
+		scrInfoH.nPos = 0;
+		
+
+		//縦スクロールバー初期設定
+		scrInfoV.cbSize = sizeof(SCROLLINFO);
+		scrInfoV.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoV.nMin = 0;
+		scrInfoV.nMax = Nu;
+		scrInfoV.nPage = 1;
+		scrInfoV.nPos = 0;
+		
+		texting = TEXT("表示しました。");
+		InvalidateRect(hWnd, NULL, TRUE);
+
+		break;
+	case WM_PAINT:
+		PAINTSTRUCT     ps;
+
+
+		// DCコンパチブルの描画
+		hDC = BeginPaint(hDlg2, &ps);
+		BitBlt(hDC, 0, 0, MAX_WIDTH, MAX_HEIGHT, hMemDC, scrInfoH.nPos, scrInfoV.nPos, SRCCOPY);
+		EndPaint(hDlg2, &ps);
+
+		break;
+	case WM_SIZE:
+		scrInfoV.nPos = 0;
+		scrInfoH.nPos = 0;
+		InvalidateRect(hDlg2, NULL, TRUE);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_RIGHT:
+			scrInfoH.nPos += 10;
+			InvalidateRect(hDlg2, NULL, TRUE);
+
+			break;
+		case VK_LEFT:
+			scrInfoH.nPos -= 10;
+			InvalidateRect(hDlg2, NULL, TRUE);
+
+			break;
+		case VK_UP:
+			scrInfoV.nPos -= 10;
+			InvalidateRect(hDlg2, NULL, TRUE);
+
+			break;
+		case VK_DOWN:
+			scrInfoV.nPos += 10;
+			InvalidateRect(hDlg2, NULL, TRUE);
+
+			break;
+		default:
+			break;
+		}
+
+	default:
+		return DefWindowProc(hDlg2, message, wParam, lParam);
+	}
+	return 0;
+}
+
+
+LRESULT CALLBACK Pict3Proc(HWND hDlg3, UINT message, WPARAM wParam, LPARAM lParam)//R
+{
+	static HBITMAP  hBitmap;    // ビットマップ
+	static HDC      hMemDC;     // オフスクリーン
+	static UINT     saveX;
+	static UINT     saveY;
+	static SCROLLINFO scrInfoH, scrInfoV;
+
+	switch (message)
+	{
+
+	case WM_CLOSE:
+		DeleteDC(hMemDC);
+		DeleteObject(hBitmap);
+		DestroyWindow(hDlg3);
+		break;
+
+	case WM_INITDIALOG:
+		HDC hDC;
+
+		// DCコンパチブルの作成
+		hDC = GetDC(hDlg3);
+		hMemDC = CreateCompatibleDC(hDC);
+		hBitmap = CreateCompatibleBitmap(hDC, MAX_WIDTH, MAX_HEIGHT);
+		SelectObject(hMemDC, hBitmap);
+		ReleaseDC(hDlg3, hDC);
+
+		for (numu = 0; numu < Nu; ++numu) {
+			for (numr = 0; numr < Nr; ++numr) {
+				SetPixel(hMemDC, numr, numu, RGB(c1[1][numu][numr], c1[0][numu][numr], c1[0][numu][numr]));
+			}
+		}
+
+
+		//横スクロールバー初期設定
+		scrInfoH.cbSize = sizeof(SCROLLINFO);
+		scrInfoH.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoH.nMin = 0;
+		scrInfoH.nMax = Nr;
+		scrInfoH.nPage = 1;
+		scrInfoH.nPos = 0;
+		
+
+		//縦スクロールバー初期設定
+		scrInfoV.cbSize = sizeof(SCROLLINFO);
+		scrInfoV.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoV.nMin = 0;
+		scrInfoV.nMax = Nu;
+		scrInfoV.nPage = 1;
+		scrInfoV.nPos = 0;
+		
+		texting = TEXT("表示しました。");
+		InvalidateRect(hWnd, NULL, TRUE);
+
+		break;
+	case WM_PAINT:
+		PAINTSTRUCT     ps;
+
+
+		// DCコンパチブルの描画
+		hDC = BeginPaint(hDlg3, &ps);
+		BitBlt(hDC, 0, 0, MAX_WIDTH, MAX_HEIGHT, hMemDC, scrInfoH.nPos, scrInfoV.nPos, SRCCOPY);
+		EndPaint(hDlg3, &ps);
+
+		break;
+	case WM_SIZE:
+		scrInfoV.nPos = 0;
+		scrInfoH.nPos = 0;
+		InvalidateRect(hDlg3, NULL, TRUE);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_RIGHT:
+			scrInfoH.nPos += 10;
+			InvalidateRect(hDlg3, NULL, TRUE);
+
+			break;
+		case VK_LEFT:
+			scrInfoH.nPos -= 10;
+			InvalidateRect(hDlg3, NULL, TRUE);
+
+			break;
+		case VK_UP:
+			scrInfoV.nPos -= 10;
+			InvalidateRect(hDlg3, NULL, TRUE);
+
+			break;
+		case VK_DOWN:
+			scrInfoV.nPos += 10;
+			InvalidateRect(hDlg3, NULL, TRUE);
+
+			break;
+		default:
+			break;
+		}
+
+	default:
+		return DefWindowProc(hDlg3, message, wParam, lParam);
+	}
+	return 0;
+}
+
+LRESULT CALLBACK Pict4Proc(HWND hDlg4, UINT message, WPARAM wParam, LPARAM lParam)//グレー
+{
+	static HBITMAP  hBitmap;    // ビットマップ
+	static HDC      hMemDC;     // オフスクリーン
+	static UINT     saveX;
+	static UINT     saveY;
+	static SCROLLINFO scrInfoH, scrInfoV;
+
+	switch (message)
+	{
+
+	case WM_CLOSE:
+		DeleteDC(hMemDC);
+		DeleteObject(hBitmap);
+		DestroyWindow(hDlg4);
+		break;
+
+	case WM_INITDIALOG:
+		HDC hDC;
+
+		// DCコンパチブルの作成
+		hDC = GetDC(hDlg3);
+		hMemDC = CreateCompatibleDC(hDC);
+		hBitmap = CreateCompatibleBitmap(hDC, MAX_WIDTH, MAX_HEIGHT);
+		SelectObject(hMemDC, hBitmap);
+		ReleaseDC(hDlg4, hDC);
+
+		for (numu = 0; numu < Nu; ++numu) {
+			for (numr = 0; numr < Nr; ++numr) {
+				SetPixel(hMemDC, numr, numu, RGB(c1[0][numu][numr], c1[0][numu][numr], c1[0][numu][numr]));
+			}
+		}
+
+
+		//横スクロールバー初期設定
+		scrInfoH.cbSize = sizeof(SCROLLINFO);
+		scrInfoH.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoH.nMin = 0;
+		scrInfoH.nMax = Nr;
+		scrInfoH.nPage = 1;
+		scrInfoH.nPos = 0;
+
+
+		//縦スクロールバー初期設定
+		scrInfoV.cbSize = sizeof(SCROLLINFO);
+		scrInfoV.fMask = SIF_DISABLENOSCROLL | SIF_POS | SIF_RANGE | SIF_PAGE;
+		scrInfoV.nMin = 0;
+		scrInfoV.nMax = Nu;
+		scrInfoV.nPage = 1;
+		scrInfoV.nPos = 0;
+
+		texting = TEXT("表示しました。");
+		InvalidateRect(hWnd, NULL, TRUE);
+
+		break;
+	case WM_PAINT:
+		PAINTSTRUCT     ps;
+
+
+		// DCコンパチブルの描画
+		hDC = BeginPaint(hDlg4, &ps);
+		BitBlt(hDC, 0, 0, MAX_WIDTH, MAX_HEIGHT, hMemDC, scrInfoH.nPos, scrInfoV.nPos, SRCCOPY);
+		EndPaint(hDlg4, &ps);
+
+		break;
+	case WM_SIZE:
+		scrInfoV.nPos = 0;
+		scrInfoH.nPos = 0;
+		InvalidateRect(hDlg4, NULL, TRUE);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_RIGHT:
+			scrInfoH.nPos += 10;
+			InvalidateRect(hDlg4, NULL, TRUE);
+
+			break;
+		case VK_LEFT:
+			scrInfoH.nPos -= 10;
+			InvalidateRect(hDlg4, NULL, TRUE);
+
+			break;
+		case VK_UP:
+			scrInfoV.nPos -= 10;
+			InvalidateRect(hDlg4, NULL, TRUE);
+
+			break;
+		case VK_DOWN:
+			scrInfoV.nPos += 10;
+			InvalidateRect(hDlg4, NULL, TRUE);
+
+			break;
+		default:
+			break;
+		}
+
+	default:
+		return DefWindowProc(hDlg4, message, wParam, lParam);
+	}
+	return 0;
+}
+
+
+
 
 // バージョン情報ボックスのメッセージ ハンドラーです。
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

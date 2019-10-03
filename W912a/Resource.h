@@ -3,6 +3,7 @@
 // W912a.rc ‚ÅŽg—p
 //
 #define IDC_MYICON                      2
+#define IDD_FORMVIEW                    101
 #define IDD_W912A_DIALOG                102
 #define IDS_APP_TITLE                   103
 #define IDD_ABOUTBOX                    103
@@ -56,6 +57,10 @@
 #define ID_RED_32813                    32813
 #define ID_RED_32814                    32814
 #define ID_RED_32815                    32815
+#define ID_YELLOW_32816                 32816
+#define ID_BLUE_32817                   32817
+#define ID_RED_32818                    32818
+#define ID_32819                        32819
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -64,7 +69,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        129
-#define _APS_NEXT_COMMAND_VALUE         32816
+#define _APS_NEXT_COMMAND_VALUE         32820
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
